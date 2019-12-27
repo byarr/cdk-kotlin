@@ -14,6 +14,17 @@ plugins {
 }
 
 subprojects {
+    configurations.all {
+        resolutionStrategy {
+            eachDependency {
+                if (requested.group == "software.amazon.awscdk") {
+                    useVersion("1.19.0")
+                }
+            }
+        }
+    }
+}
+subprojects {
     apply {
         plugin("org.jetbrains.kotlin.jvm")
         plugin("java-library")
