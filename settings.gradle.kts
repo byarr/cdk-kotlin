@@ -1,3 +1,3 @@
 rootProject.name = "cdk-kotlin"
 
-include("lambda", "sqs")
+include("core", "apigateway", "events", "lambda", "sqs", "examples")
