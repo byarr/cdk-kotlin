@@ -1,4 +1,3 @@
-
 dependencies {
-    implementation("software.amazon.awscdk:sqs")
+    api("software.amazon.awscdk:sqs")
 }
