@@ -18,27 +18,24 @@ fun awsService(clazz: Class<*>): String {
 fun main() {
     val reflections = Reflections("software.amazon.awscdk")
     val resources = reflections.getSubTypesOf(Resource::class.java)
-    val groupBy = resources.asSequence()
+    val classesByService = resources.asSequence()
             .filter { it.name.contains("service") }
             .filterNot { it.isInterface }
             .filterNot { Modifier.isAbstract(it.modifiers) }
             .filterNot { it.isMemberClass }
             .groupBy { awsService(it) }
-    groupBy.forEach{
-        println(it.key)
-        println(it.value)
-    }
 
-
-    groupBy.forEach {
+    // generate the code for each
+    classesByService.forEach {
         val generator = Generator(it.key)
         generator.generate(it.value)
     }
 
+    // print the include statement for settings file
     println(
-    groupBy.keys.asSequence()
+        classesByService.keys.asSequence()
             .sorted()
             .map {"\"$it\""}
-            .joinToString(separator = ", ", prefix = "(", postfix = ")")
+            .joinToString(separator = ", ", prefix = "include(", postfix = ")")
     )
 }
