@@ -47,9 +47,10 @@ object ModuleGenerator {
 
         for (module in modules) {
 
-            println(module.artifact)
+            println("[${module.artifact}]")
 
-            CodeGen.generate(module)
+            val codeGen = CodeGen(module)
+            codeGen.generate()
 
         }
     }

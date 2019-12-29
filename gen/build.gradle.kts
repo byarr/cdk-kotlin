@@ -1,3 +1,6 @@
+import com.brianyarr.cdk.gen.addCdkDeps
+
+addCdkDeps()
 
 dependencies {
     implementation("com.beust:klaxon:5.0.1")
