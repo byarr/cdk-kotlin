@@ -19,8 +19,10 @@ fun main() {
     val reflections = Reflections("software.amazon.awscdk")
     val resources = reflections.getSubTypesOf(Resource::class.java)
     val groupBy = resources.asSequence()
+            .filter { it.name.contains("service") }
             .filterNot { it.isInterface }
             .filterNot { Modifier.isAbstract(it.modifiers) }
+            .filterNot { it.isMemberClass }
             .groupBy { awsService(it) }
     groupBy.forEach{
         println(it.key)
@@ -32,4 +34,11 @@ fun main() {
         val generator = Generator(it.key)
         generator.generate(it.value)
     }
+
+    println(
+    groupBy.keys.asSequence()
+            .sorted()
+            .map {"\"$it\""}
+            .joinToString(separator = ", ", prefix = "(", postfix = ")")
+    )
 }

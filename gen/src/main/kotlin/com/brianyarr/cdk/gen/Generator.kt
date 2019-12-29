@@ -3,9 +3,9 @@ package com.brianyarr.cdk.gen
 import java.io.File
 import java.io.FileOutputStream
 
-class Generator (val service: String) {
+class Generator (private val service: String) {
 
-    val outDir = File(service)
+    private val outDir = File(service)
 
     fun generate(classes: List<Class<*>>) {
         mkdir()
@@ -22,16 +22,56 @@ class Generator (val service: String) {
 
         val srcFile = File(srcDir, "Dsl.kt")
 
+        val imports = classes.asSequence()
+                .map { it.name }
+                .flatMap { sequenceOf(it, "${it}Props") }
+                .map { "import $it" }
+                .joinToString(separator = "\n")
+
+
         FileOutputStream(srcFile).use {
-            it.bufferedWriter().appendln("package $packageName")
+            val bufferedWriter = it.bufferedWriter()
+            bufferedWriter.appendln("package $packageName")
+            bufferedWriter.newLine()
+
+            bufferedWriter.appendln("import software.amazon.awscdk.core.Construct")
+            bufferedWriter.appendln(imports)
+            bufferedWriter.newLine()
+
+
+            classes.forEach {
+                bufferedWriter.appendln(resourceDsl(it))
+                bufferedWriter.newLine()
+            }
+
+            bufferedWriter.flush()
         }
+    }
+
+    private fun resourceDsl(clazz: Class<*>): String {
+
+        val resourceShortName = clazz.simpleName
+        val functionName = resourceShortName[0].toLowerCase() + resourceShortName.substring(1)
+        val propShortName = clazz.simpleName + "Props"
+
+        return """
+            fun Construct.$functionName(id: String, init: ${propShortName}.Builder.() -> Unit): $resourceShortName {
+                val propsBuilder = ${propShortName}.builder()
+                propsBuilder.init()
+                
+                return $resourceShortName(this, id, propsBuilder.build())
+            }
+            
+        """.trimIndent()
     }
 
     private fun writeGradleFile() {
         FileOutputStream(File(outDir, "build.gradle.kts")).use {
-            it.bufferedWriter().appendln("dependencies {\n" +
+            val bufferedWriter = it.bufferedWriter()
+            bufferedWriter.appendln("dependencies {\n" +
                     "    api(\"software.amazon.awscdk:${service}\")\n" +
                     "}")
+            bufferedWriter.flush()
         }
     }
 
