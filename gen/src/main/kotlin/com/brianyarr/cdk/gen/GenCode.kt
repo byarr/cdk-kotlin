@@ -1,6 +1,7 @@
 package com.brianyarr.cdk.gen
 
 import org.reflections.Reflections
+import software.amazon.awscdk.core.Construct
 import software.amazon.awscdk.core.Resource
 import java.lang.reflect.Modifier
 
@@ -17,7 +18,7 @@ fun awsService(clazz: Class<*>): String {
 
 fun main() {
     val reflections = Reflections("software.amazon.awscdk")
-    val resources = reflections.getSubTypesOf(Resource::class.java)
+    val resources = reflections.getSubTypesOf(Construct::class.java)
     val classesByService = resources.asSequence()
             .filter { it.name.contains("service") }
             .filterNot { it.isInterface }
@@ -34,6 +35,7 @@ fun main() {
     // print the include statement for settings file
     println(
         classesByService.keys.asSequence()
+                .map { it.replace(".", "") }
             .sorted()
             .map {"\"$it\""}
             .joinToString(separator = ", ", prefix = "include(", postfix = ")")

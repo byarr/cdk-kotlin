@@ -5,7 +5,7 @@ import java.io.FileOutputStream
 
 class Generator (private val service: String) {
 
-    private val outDir = File(service)
+    private val outDir = File(service.replace(".", ""))
 
     fun generate(classes: List<Class<*>>) {
         mkdir()
@@ -61,7 +61,6 @@ class Generator (private val service: String) {
                 
                 return $resourceShortName(this, id, propsBuilder.build())
             }
-            
         """.trimIndent()
     }
 
@@ -69,7 +68,7 @@ class Generator (private val service: String) {
         FileOutputStream(File(outDir, "build.gradle.kts")).use {
             val bufferedWriter = it.bufferedWriter()
             bufferedWriter.appendln("dependencies {\n" +
-                    "    api(\"software.amazon.awscdk:${service}\")\n" +
+                    "    api(\"software.amazon.awscdk:${service.replace('.', '-')}\")\n" +
                     "}")
             bufferedWriter.flush()
         }
