@@ -3,11 +3,11 @@ package com.brianyarr.cdk.gen
 import java.io.File
 import java.io.FileOutputStream
 
-class Generator (private val service: String) {
+class Generator(private val service: String) {
 
     private val outDir = File(service.replace(".", ""))
 
-    fun generate(classes: List<Class<*>>) {
+    fun generate(classes: List<CdkConstruct>) {
         mkdir()
 
         writeGradleFile()
@@ -15,7 +15,7 @@ class Generator (private val service: String) {
         generateDsl(classes)
     }
 
-    private fun generateDsl(classes: List<Class<*>>) {
+    private fun generateDsl(classes: List<CdkConstruct>) {
         val packageName = "com.brianyarr.cdk.$service"
         val srcDir = File(outDir, "src/main/kotlin/${packageName.replace('.', '/')}")
         srcDir.mkdirs()
@@ -23,6 +23,7 @@ class Generator (private val service: String) {
         val srcFile = File(srcDir, "Dsl.kt")
 
         val imports = classes.asSequence()
+                .map {it.clazz }
                 .map { it.name }
                 .flatMap { sequenceOf(it, "${it}Props") }
                 .map { "import $it" }
@@ -40,7 +41,7 @@ class Generator (private val service: String) {
 
 
             classes.forEach {
-                bufferedWriter.appendln(resourceDsl(it))
+                bufferedWriter.appendln(resourceDsl(it.clazz))
                 bufferedWriter.newLine()
             }
 

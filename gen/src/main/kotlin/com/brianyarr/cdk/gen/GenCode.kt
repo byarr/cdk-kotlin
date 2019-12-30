@@ -19,12 +19,11 @@ fun awsService(clazz: Class<*>): String {
 fun main() {
     val reflections = Reflections("software.amazon.awscdk")
     val resources = reflections.getSubTypesOf(Construct::class.java)
+
     val classesByService = resources.asSequence()
-            .filter { it.name.contains("service") }
-            .filterNot { it.isInterface }
-            .filterNot { Modifier.isAbstract(it.modifiers) }
-            .filterNot { it.isMemberClass }
-            .groupBy { awsService(it) }
+            .map { CdkConstruct(it) }
+            .filter { it.isServiceConstruct() }
+            .groupBy { it.service()!! }
 
     // generate the code for each
     classesByService.forEach {
