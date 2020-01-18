@@ -7,8 +7,6 @@ import software.amazon.awscdk.services.cloudformation.CustomResource
 import software.amazon.awscdk.services.cloudformation.CustomResourceProps
 import software.amazon.awscdk.services.cloudformation.NestedStack
 import software.amazon.awscdk.services.cloudformation.NestedStackProps
-import software.amazon.awscdk.services.cloudformation.CfnWaitConditionHandle
-import software.amazon.awscdk.services.cloudformation.CfnWaitConditionHandleProps
 import software.amazon.awscdk.services.cloudformation.CfnStack
 import software.amazon.awscdk.services.cloudformation.CfnStackProps
 import software.amazon.awscdk.services.cloudformation.CfnCustomResource
@@ -35,13 +33,6 @@ fun Construct.nestedStack(id: String, init: NestedStackProps.Builder.() -> Unit)
     propsBuilder.init()
     
     return NestedStack(this, id, propsBuilder.build())
-}
-
-fun Construct.cfnWaitConditionHandle(id: String, init: CfnWaitConditionHandleProps.Builder.() -> Unit): CfnWaitConditionHandle {
-    val propsBuilder = CfnWaitConditionHandleProps.builder()
-    propsBuilder.init()
-    
-    return CfnWaitConditionHandle(this, id, propsBuilder.build())
 }
 
 fun Construct.cfnStack(id: String, init: CfnStackProps.Builder.() -> Unit): CfnStack {

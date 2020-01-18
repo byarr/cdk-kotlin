@@ -1,6 +1,6 @@
 import com.brianyarr.cdk.gen.addCdkDeps
 
-addCdkDeps()
+addCdkDeps("software.amazon.awscdk", "1.19.0")
 
 dependencies {
     implementation("com.beust:klaxon:5.0.1")

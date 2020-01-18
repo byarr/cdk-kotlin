@@ -25,4 +25,14 @@ class CdkConstruct(val clazz: Class<*>) {
                 ! clazz.isMemberClass
     }
 
+    fun hasProps(): Boolean {
+        val propsName = clazz.name + "Props"
+        return try {
+            Class.forName(propsName)
+            true
+        } catch (c : ClassNotFoundException) {
+            false
+        }
+    }
+
 }

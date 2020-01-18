@@ -6,12 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
 import java.net.URL
 
-fun Project.addCdkDeps() {
+fun Project.addCdkDeps(groupId: String, version: String) {
 
-    val groupId = "software.amazon.awscdk"
-    val version = "1.19.0"
-
-    val respTree = loadDeps()
+    val respTree = loadDeps(groupId, version)
 
     val docs = respTree.get("response").get("docs")
 
@@ -30,8 +27,8 @@ fun Project.addCdkDeps() {
 
 }
 
-private fun loadDeps(): JsonNode {
-    val url = URL("http://search.maven.org/solrsearch/select?q=g:%22software.amazon.awscdk%22+AND+v:%221.19.0%22&rows=200&core=gav")
+private fun loadDeps(groupId: String, version: String): JsonNode {
+    val url = URL("http://search.maven.org/solrsearch/select?q=g:%22${groupId}%22+AND+v:%22${version}%22&rows=200&core=gav")
     val objectMapper = ObjectMapper()
     val respTree = objectMapper.readTree(url.openStream())
     return respTree

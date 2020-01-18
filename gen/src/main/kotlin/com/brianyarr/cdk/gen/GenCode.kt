@@ -23,6 +23,7 @@ fun main() {
     val classesByService = resources.asSequence()
             .map { CdkConstruct(it) }
             .filter { it.isServiceConstruct() }
+            .filter { it.hasProps() }
             .groupBy { it.service()!! }
 
     // generate the code for each
