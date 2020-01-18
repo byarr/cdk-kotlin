@@ -66,10 +66,15 @@ class Generator(private val service: String) {
     }
 
     private fun writeGradleFile() {
+        var groupId = service.replace('.', '-')
+        if (groupId == "waf-regional") {
+            groupId = "wafregional"
+        }
+
         FileOutputStream(File(outDir, "build.gradle.kts")).use {
             val bufferedWriter = it.bufferedWriter()
             bufferedWriter.appendln("dependencies {\n" +
-                    "    api(\"software.amazon.awscdk:${service.replace('.', '-')}\")\n" +
+                    "    api(\"software.amazon.awscdk:${groupId}\")\n" +
                     "}")
             bufferedWriter.flush()
         }

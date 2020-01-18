@@ -1,3 +1,3 @@
 dependencies {
-    api("software.amazon.awscdk:waf-regional")
+    api("software.amazon.awscdk:wafregional")
 }
