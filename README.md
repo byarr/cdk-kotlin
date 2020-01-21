@@ -9,6 +9,10 @@ Using the nice DSL ability of Kotlin with AWS CDK to do IaC with some actual cod
 - `serverless` has my homage to the serverless framework
 - the rest of the modules are generated automagically and 
 
+## Building
+
+The auto-generation of code is essentially a manual stage at the moment. TODO look into how to do this at build time with gradle.
+
 ## Usage
 
 By using Kotlin extension functions we can create CDK apps with a minimum of boiler plate, e.g.:
