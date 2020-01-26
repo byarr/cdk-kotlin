@@ -2,6 +2,14 @@
 
 Using the nice DSL ability of Kotlin with AWS CDK to do IaC with some actual code and not YAML.
 
+## Motivation
+
+CDK is pretty cool. Generates loads of cloudformation using small bits of actual read honest to goodness code. 
+Taking an example provided by AWS (https://github.com/aws-samples/aws-cdk-examples/blob/master/typescript/api-cors-lambda-crud-dynamodb/index.ts) 134 little lines of typescript 
+(about the same in kotlin com/brianyarr/cdk/sample/apicorsdynamo/ApiLambdaCrudDynamoDBStack.kt) generates 1500 lines of cloudformation. 
+Now a lot of cloudformation lines are a bit pointless, some more compact formatting (e.g. of the JOINs) would take that down a fair bit.
+Nether the less it does contain some 40 resources!
+
 ## Organisation
 
 - `gen` contains the code that autogenerates a module per CDK service
@@ -38,3 +46,9 @@ val app = app {
 ```
 
 One of the nice things about this is that we aren't defining a lot of new types and functionality. Just using the existing AWS CDK in a more fluent way.
+
+## TODO
+
+Not all `Builder` things are resources. Can we generate code for those classes.
+Dynamodb Attributes have two fields, doesnt need a builder.
+`LambdaIntegration` (other integrations are available) has options which have a builder, do they need DSL
