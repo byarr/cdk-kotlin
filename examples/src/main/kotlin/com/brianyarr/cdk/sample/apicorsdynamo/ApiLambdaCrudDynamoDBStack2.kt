@@ -12,21 +12,22 @@ import software.amazon.awscdk.services.lambda.Function
 import software.amazon.awscdk.services.lambda.FunctionProps
 import software.amazon.awscdk.services.lambda.Runtime
 
-class ApiLambdaCrudDynamoDBStack2(scope: Construct, id: String): Stack(scope, id) {
+class ApiLambdaCrudDynamoDBStack2(scope: Construct, id: String) : Stack(scope, id) {
 
     private val dynamoTable: Table
+
     init {
         dynamoTable = Table(this, "items", TableProps.builder()
-            .tableName("items")
-            .partitionKey(Attribute.builder()
-                    .name(ITEM_ID)
-                    .type(AttributeType.STRING).build())
-            .removalPolicy(RemovalPolicy.DESTROY).build())
+                .tableName("items")
+                .partitionKey(Attribute.builder()
+                        .name(ITEM_ID)
+                        .type(AttributeType.STRING).build())
+                .removalPolicy(RemovalPolicy.DESTROY).build())
 
 
         val getOneLambda = lambdaFunction("get-one.handler")
         val getAllLambda = lambdaFunction("get-all.handler")
-        val createOne = lambdaFunction( "create.handler")
+        val createOne = lambdaFunction("create.handler")
         val updateOne = lambdaFunction("update-one.handler")
         val deleteOne = lambdaFunction("delete-one.handler")
 
@@ -61,16 +62,17 @@ class ApiLambdaCrudDynamoDBStack2(scope: Construct, id: String): Stack(scope, id
     }
 
     private fun addCorsOptions(apiResource: IResource) {
+        val responseParams = mapOf(
+                "method.response.header.Access-Control-Allow-Headers" to "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Origin" to "'*'",
+                "method.response.header.Access-Control-Allow-Credentials" to "'false'",
+                "method.response.header.Access-Control-Allow-Methods" to "'OPTIONS,GET,PUT,POST,DELETE'"
+        )
         apiResource.addMethod("OPTIONS", MockIntegration(IntegrationOptions.builder()
                 .integrationResponses(listOf(
                         IntegrationResponse.builder()
                                 .statusCode("200")
-                                .responseParameters(mapOf(
-                                        ALLOW_HEADERS to "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                                        ALLOW_ORIGIN to "'*'",
-                                        ALLOW_CREDS to "'false'",
-                                        ALLOW_METHODS to "'OPTIONS,GET,PUT,POST,DELETE'"
-                                ))
+                                .responseParameters(responseParams)
                                 .build()
 
                 ))
@@ -80,20 +82,13 @@ class ApiLambdaCrudDynamoDBStack2(scope: Construct, id: String): Stack(scope, id
 
                 .methodResponses(listOf(MethodResponse.builder()
                         .statusCode("200")
-                        .responseParameters(HEADERS.associateWith { true })
+                        .responseParameters(responseParams.mapValues { true })
                         .build()))
                 .build())
     }
 
     companion object {
         private const val ITEM_ID: String = "itemId"
-
-        private const val ALLOW_HEADERS: String = "method.response.header.Access-Control-Allow-Headers"
-        private const val ALLOW_METHODS: String = "method.response.header.Access-Control-Allow-Methods"
-        private const val ALLOW_CREDS: String = "method.response.header.Access-Control-Allow-Credentials"
-        private const val ALLOW_ORIGIN: String = "method.response.header.Access-Control-Allow-Origin"
-
-        private val HEADERS: List<String> = listOf(ALLOW_HEADERS, ALLOW_METHODS, ALLOW_CREDS, ALLOW_ORIGIN)
 
         @JvmStatic
         fun main(args: Array<String>) {
