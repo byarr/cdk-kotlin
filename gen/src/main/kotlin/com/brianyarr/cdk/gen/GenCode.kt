@@ -6,7 +6,7 @@ import software.amazon.awscdk.core.Resource
 import java.lang.reflect.Modifier
 
 fun awsService(clazz: Class<*>): String {
-    val packageName = clazz.packageName
+    val packageName = clazz.`package`.name
     if (packageName.startsWith("software.amazon.awscdk.services.")) {
         return packageName.substring("software.amazon.awscdk.services.".length)
     }

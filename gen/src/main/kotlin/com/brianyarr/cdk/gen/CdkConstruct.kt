@@ -5,7 +5,7 @@ import java.lang.reflect.Modifier
 class CdkConstruct(val clazz: Class<*>) {
 
     fun service(): String? {
-        val packageName = clazz.packageName
+        val packageName = clazz.`package`.name
         if (packageName.startsWith("software.amazon.awscdk.services.")) {
             return packageName.substring("software.amazon.awscdk.services.".length)
         }
