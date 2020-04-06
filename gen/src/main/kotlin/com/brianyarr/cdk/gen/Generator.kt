@@ -3,9 +3,9 @@ package com.brianyarr.cdk.gen
 import java.io.File
 import java.io.FileOutputStream
 
-class Generator(private val service: String) {
+class Generator(private val service: String, private val rootDir: String) {
 
-    private val outDir = File(service.replace(".", ""))
+    private val outDir = File(rootDir, service.replace(".", ""))
 
     fun generate(classes: List<CdkConstruct>) {
         mkdir()

@@ -4,6 +4,11 @@ import org.reflections.Reflections
 import software.amazon.awscdk.core.Construct
 import software.amazon.awscdk.core.Resource
 import java.lang.reflect.Modifier
+import java.io.File
+import java.io.FileOutputStream
+
+val rootProjectName = "cdk-kotlin"
+val includes = listOf("core", "examples", "serverless")
 
 fun awsService(clazz: Class<*>): String {
     val packageName = clazz.`package`.name
@@ -16,7 +21,29 @@ fun awsService(clazz: Class<*>): String {
 
 }
 
-fun main() {
+private fun asInclude(subprojects: Sequence<String>): String {
+    return subprojects
+            .map {"\"$it\""}
+            .joinToString(separator = ", ", prefix = "include(", postfix = ")")
+}
+
+private fun writeSettingsFile(rootDir: String, modules: Sequence<String>) {
+
+    val settingsFile = File(rootDir, "settings.gradle.kts")
+
+    FileOutputStream(settingsFile).use {
+        val bufferedWriter = it.bufferedWriter()
+        bufferedWriter.appendln("""rootProject.name = "${rootProjectName}"""".trimMargin())
+        bufferedWriter.appendln()
+
+        bufferedWriter.appendln(asInclude(includes.asSequence()))
+        bufferedWriter.appendln(asInclude(modules))
+        bufferedWriter.flush()
+    }
+
+}
+
+fun main(args: Array<String>) {
     val reflections = Reflections("software.amazon.awscdk")
     val resources = reflections.getSubTypesOf(Construct::class.java)
 
@@ -28,16 +55,12 @@ fun main() {
 
     // generate the code for each
     classesByService.forEach {
-        val generator = Generator(it.key)
+        val generator = Generator(it.key, args[0])
         generator.generate(it.value)
     }
 
-    // print the include statement for settings file
-    println(
-        classesByService.keys.asSequence()
-                .map { it.replace(".", "") }
-            .sorted()
-            .map {"\"$it\""}
-            .joinToString(separator = ", ", prefix = "include(", postfix = ")")
-    )
+    writeSettingsFile(args[0], classesByService.keys.asSequence()
+            .map { it.replace(".", "") }
+            .sorted())
+
 }

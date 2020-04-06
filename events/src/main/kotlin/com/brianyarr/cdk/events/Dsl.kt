@@ -5,10 +5,10 @@ import software.amazon.awscdk.services.events.CfnEventBusPolicy
 import software.amazon.awscdk.services.events.CfnEventBusPolicyProps
 import software.amazon.awscdk.services.events.Rule
 import software.amazon.awscdk.services.events.RuleProps
-import software.amazon.awscdk.services.events.CfnRule
-import software.amazon.awscdk.services.events.CfnRuleProps
 import software.amazon.awscdk.services.events.EventBus
 import software.amazon.awscdk.services.events.EventBusProps
+import software.amazon.awscdk.services.events.CfnRule
+import software.amazon.awscdk.services.events.CfnRuleProps
 import software.amazon.awscdk.services.events.CfnEventBus
 import software.amazon.awscdk.services.events.CfnEventBusProps
 
@@ -26,18 +26,18 @@ fun Construct.rule(id: String, init: RuleProps.Builder.() -> Unit): Rule {
     return Rule(this, id, propsBuilder.build())
 }
 
-fun Construct.cfnRule(id: String, init: CfnRuleProps.Builder.() -> Unit): CfnRule {
-    val propsBuilder = CfnRuleProps.builder()
-    propsBuilder.init()
-    
-    return CfnRule(this, id, propsBuilder.build())
-}
-
 fun Construct.eventBus(id: String, init: EventBusProps.Builder.() -> Unit): EventBus {
     val propsBuilder = EventBusProps.builder()
     propsBuilder.init()
     
     return EventBus(this, id, propsBuilder.build())
+}
+
+fun Construct.cfnRule(id: String, init: CfnRuleProps.Builder.() -> Unit): CfnRule {
+    val propsBuilder = CfnRuleProps.builder()
+    propsBuilder.init()
+    
+    return CfnRule(this, id, propsBuilder.build())
 }
 
 fun Construct.cfnEventBus(id: String, init: CfnEventBusProps.Builder.() -> Unit): CfnEventBus {

@@ -1,18 +1,18 @@
 package com.brianyarr.cdk.mediaconvert
 
 import software.amazon.awscdk.core.Construct
-import software.amazon.awscdk.services.mediaconvert.CfnQueue
-import software.amazon.awscdk.services.mediaconvert.CfnQueueProps
-import software.amazon.awscdk.services.mediaconvert.CfnPreset
-import software.amazon.awscdk.services.mediaconvert.CfnPresetProps
 import software.amazon.awscdk.services.mediaconvert.CfnJobTemplate
 import software.amazon.awscdk.services.mediaconvert.CfnJobTemplateProps
+import software.amazon.awscdk.services.mediaconvert.CfnPreset
+import software.amazon.awscdk.services.mediaconvert.CfnPresetProps
+import software.amazon.awscdk.services.mediaconvert.CfnQueue
+import software.amazon.awscdk.services.mediaconvert.CfnQueueProps
 
-fun Construct.cfnQueue(id: String, init: CfnQueueProps.Builder.() -> Unit): CfnQueue {
-    val propsBuilder = CfnQueueProps.builder()
+fun Construct.cfnJobTemplate(id: String, init: CfnJobTemplateProps.Builder.() -> Unit): CfnJobTemplate {
+    val propsBuilder = CfnJobTemplateProps.builder()
     propsBuilder.init()
     
-    return CfnQueue(this, id, propsBuilder.build())
+    return CfnJobTemplate(this, id, propsBuilder.build())
 }
 
 fun Construct.cfnPreset(id: String, init: CfnPresetProps.Builder.() -> Unit): CfnPreset {
@@ -22,10 +22,10 @@ fun Construct.cfnPreset(id: String, init: CfnPresetProps.Builder.() -> Unit): Cf
     return CfnPreset(this, id, propsBuilder.build())
 }
 
-fun Construct.cfnJobTemplate(id: String, init: CfnJobTemplateProps.Builder.() -> Unit): CfnJobTemplate {
-    val propsBuilder = CfnJobTemplateProps.builder()
+fun Construct.cfnQueue(id: String, init: CfnQueueProps.Builder.() -> Unit): CfnQueue {
+    val propsBuilder = CfnQueueProps.builder()
     propsBuilder.init()
     
-    return CfnJobTemplate(this, id, propsBuilder.build())
+    return CfnQueue(this, id, propsBuilder.build())
 }
 
