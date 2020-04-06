@@ -1,12 +1,19 @@
 package com.brianyarr.cdk.route53resolver
 
 import software.amazon.awscdk.core.Construct
+import software.amazon.awscdk.services.route53resolver.CfnResolverEndpoint
+import software.amazon.awscdk.services.route53resolver.CfnResolverEndpointProps
 import software.amazon.awscdk.services.route53resolver.CfnResolverRuleAssociation
 import software.amazon.awscdk.services.route53resolver.CfnResolverRuleAssociationProps
 import software.amazon.awscdk.services.route53resolver.CfnResolverRule
 import software.amazon.awscdk.services.route53resolver.CfnResolverRuleProps
-import software.amazon.awscdk.services.route53resolver.CfnResolverEndpoint
-import software.amazon.awscdk.services.route53resolver.CfnResolverEndpointProps
+
+fun Construct.cfnResolverEndpoint(id: String, init: CfnResolverEndpointProps.Builder.() -> Unit): CfnResolverEndpoint {
+    val propsBuilder = CfnResolverEndpointProps.builder()
+    propsBuilder.init()
+    
+    return CfnResolverEndpoint(this, id, propsBuilder.build())
+}
 
 fun Construct.cfnResolverRuleAssociation(id: String, init: CfnResolverRuleAssociationProps.Builder.() -> Unit): CfnResolverRuleAssociation {
     val propsBuilder = CfnResolverRuleAssociationProps.builder()
@@ -20,12 +27,5 @@ fun Construct.cfnResolverRule(id: String, init: CfnResolverRuleProps.Builder.() 
     propsBuilder.init()
     
     return CfnResolverRule(this, id, propsBuilder.build())
-}
-
-fun Construct.cfnResolverEndpoint(id: String, init: CfnResolverEndpointProps.Builder.() -> Unit): CfnResolverEndpoint {
-    val propsBuilder = CfnResolverEndpointProps.builder()
-    propsBuilder.init()
-    
-    return CfnResolverEndpoint(this, id, propsBuilder.build())
 }
 

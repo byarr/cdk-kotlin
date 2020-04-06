@@ -5,10 +5,10 @@ import software.amazon.awscdk.services.kms.Alias
 import software.amazon.awscdk.services.kms.AliasProps
 import software.amazon.awscdk.services.kms.Key
 import software.amazon.awscdk.services.kms.KeyProps
-import software.amazon.awscdk.services.kms.CfnAlias
-import software.amazon.awscdk.services.kms.CfnAliasProps
 import software.amazon.awscdk.services.kms.CfnKey
 import software.amazon.awscdk.services.kms.CfnKeyProps
+import software.amazon.awscdk.services.kms.CfnAlias
+import software.amazon.awscdk.services.kms.CfnAliasProps
 
 fun Construct.alias(id: String, init: AliasProps.Builder.() -> Unit): Alias {
     val propsBuilder = AliasProps.builder()
@@ -24,17 +24,17 @@ fun Construct.key(id: String, init: KeyProps.Builder.() -> Unit): Key {
     return Key(this, id, propsBuilder.build())
 }
 
-fun Construct.cfnAlias(id: String, init: CfnAliasProps.Builder.() -> Unit): CfnAlias {
-    val propsBuilder = CfnAliasProps.builder()
-    propsBuilder.init()
-    
-    return CfnAlias(this, id, propsBuilder.build())
-}
-
 fun Construct.cfnKey(id: String, init: CfnKeyProps.Builder.() -> Unit): CfnKey {
     val propsBuilder = CfnKeyProps.builder()
     propsBuilder.init()
     
     return CfnKey(this, id, propsBuilder.build())
+}
+
+fun Construct.cfnAlias(id: String, init: CfnAliasProps.Builder.() -> Unit): CfnAlias {
+    val propsBuilder = CfnAliasProps.builder()
+    propsBuilder.init()
+    
+    return CfnAlias(this, id, propsBuilder.build())
 }
 
