@@ -14,11 +14,12 @@ plugins {
 }
 
 subprojects {
+    val version: String = rootProject.file("cdk.version").readText().trim()
     configurations.all {
         resolutionStrategy {
             eachDependency {
                 if (requested.group == "software.amazon.awscdk") {
-                    useVersion("1.19.0")
+                    useVersion(version)
                 }
             }
         }

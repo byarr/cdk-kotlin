@@ -1,14 +1,21 @@
 package com.brianyarr.cdk.elasticbeanstalk
 
 import software.amazon.awscdk.core.Construct
+import software.amazon.awscdk.services.elasticbeanstalk.CfnConfigurationTemplate
+import software.amazon.awscdk.services.elasticbeanstalk.CfnConfigurationTemplateProps
 import software.amazon.awscdk.services.elasticbeanstalk.CfnApplication
 import software.amazon.awscdk.services.elasticbeanstalk.CfnApplicationProps
 import software.amazon.awscdk.services.elasticbeanstalk.CfnEnvironment
 import software.amazon.awscdk.services.elasticbeanstalk.CfnEnvironmentProps
 import software.amazon.awscdk.services.elasticbeanstalk.CfnApplicationVersion
 import software.amazon.awscdk.services.elasticbeanstalk.CfnApplicationVersionProps
-import software.amazon.awscdk.services.elasticbeanstalk.CfnConfigurationTemplate
-import software.amazon.awscdk.services.elasticbeanstalk.CfnConfigurationTemplateProps
+
+fun Construct.cfnConfigurationTemplate(id: String, init: CfnConfigurationTemplateProps.Builder.() -> Unit): CfnConfigurationTemplate {
+    val propsBuilder = CfnConfigurationTemplateProps.builder()
+    propsBuilder.init()
+    
+    return CfnConfigurationTemplate(this, id, propsBuilder.build())
+}
 
 fun Construct.cfnApplication(id: String, init: CfnApplicationProps.Builder.() -> Unit): CfnApplication {
     val propsBuilder = CfnApplicationProps.builder()
@@ -29,12 +36,5 @@ fun Construct.cfnApplicationVersion(id: String, init: CfnApplicationVersionProps
     propsBuilder.init()
     
     return CfnApplicationVersion(this, id, propsBuilder.build())
-}
-
-fun Construct.cfnConfigurationTemplate(id: String, init: CfnConfigurationTemplateProps.Builder.() -> Unit): CfnConfigurationTemplate {
-    val propsBuilder = CfnConfigurationTemplateProps.builder()
-    propsBuilder.init()
-    
-    return CfnConfigurationTemplate(this, id, propsBuilder.build())
 }
 

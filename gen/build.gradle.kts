@@ -9,7 +9,8 @@ repositories {
     jcenter()
 }
 
-addCdkDeps("software.amazon.awscdk", "1.19.0")
+val version = File(rootDir.parentFile, "cdk.version").readText().trim()
+addCdkDeps("software.amazon.awscdk", version)
 
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
